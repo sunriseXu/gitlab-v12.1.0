@@ -1,0 +1,13 @@
+- project = local_assigns.fetch(:project, nil)
+- namespace = local_assigns.fetch(:namespace, project && project.shared_runners_limit_namespace)
+- scope = (project || namespace).full_path
+- has_limit = (project || namespace).shared_runners_minutes_limit_enabled?
+- can_see_status = project.nil? || can?(current_user, :create_pipeline, project)
+- ci_warning_message = ci_usage_warning_message(namespace, project)
+
+- if cookies[:hide_shared_runner_quota_message].blank? && has_limit && can_see_status && ci_warning_message.present?
+  .shared-runner-quota-message.alert.d-none.d-sm-block{ class: ci_usage_warning_class(namespace), data: { scope: scope } }
+    = ci_warning_message
+
+    .float-right
+      = link_to 'Remind later', '#', class: 'hide-shared-runner-limit-message alert-link'

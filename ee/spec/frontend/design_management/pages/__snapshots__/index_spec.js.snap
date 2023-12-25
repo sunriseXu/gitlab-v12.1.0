@@ -1,0 +1,73 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Design management index page designs renders designs list 1`] = `
+<div>
+  <uploadform-stub
+    canuploaddesign="true"
+  />
+   
+  <div
+    class="mt-4"
+  >
+    <designlist-stub
+      designs="design"
+    />
+  </div>
+   
+  <router-view-stub />
+</div>
+`;
+
+exports[`Design management index page designs renders empty text 1`] = `
+<div>
+  <!---->
+   
+  <div
+    class="mt-4"
+  >
+    <emptystate-stub
+      canuploaddesign="true"
+    />
+  </div>
+   
+  <router-view-stub />
+</div>
+`;
+
+exports[`Design management index page designs renders error 1`] = `
+<div>
+  <!---->
+   
+  <div
+    class="mt-4"
+  >
+    <div
+      class="alert alert-danger"
+    >
+      
+      An error occurred while loading designs. Please try again.
+    
+    </div>
+  </div>
+   
+  <router-view-stub />
+</div>
+`;
+
+exports[`Design management index page designs renders loading icon 1`] = `
+<div>
+  <!---->
+   
+  <div
+    class="mt-4"
+  >
+    <glloadingicon-stub
+      color="orange"
+      label="Loading"
+      size="md"
+    />
+  </div>
+   
+  <router-view-stub />
+</div>
+`;

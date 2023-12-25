@@ -1,0 +1,9 @@
+#import "./designListFragment.graphql"
+
+mutation uploadDesign($files: [Upload!]!, $projectPath: ID!, $iid: ID!) {
+  designManagementUpload(input: { projectPath: $projectPath, iid: $iid, files: $files }) {
+    designs {
+      ...DesignListItem
+    }
+  }
+}

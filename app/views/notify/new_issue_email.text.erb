@@ -1,0 +1,9 @@
+<%= sanitize_name(@issue.author_name) %> <%= 'created an issue:' %>
+
+<% if @issue.assignees.any? -%>
+  <%= assignees_label(@issue) %>
+<% end %>
+
+<% if @issue.description -%>
+  <%= @issue.description %>
+<% end %>

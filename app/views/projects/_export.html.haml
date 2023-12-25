@@ -1,0 +1,33 @@
+- return unless Gitlab::CurrentSettings.project_export_enabled?
+
+- project = local_assigns.fetch(:project)
+
+.sub-section
+  %h4= _('Export project')
+  %p= _('Export this project with all its related data in order to move your project to a new GitLab instance. Once the export is finished, you can import the file from the "New Project" page.')
+
+  .bs-callout.bs-callout-info
+    %p.append-bottom-0
+      %p= _('The following items will be exported:')
+      %ul
+        %li= _('Project and wiki repositories')
+        %li= _('Project uploads')
+        %li= _('Project configuration, including services')
+        %li= _('Issues with comments, merge requests with diffs and comments, labels, milestones, snippets, and other project entities')
+        %li= _('LFS objects')
+      %p= _('The following items will NOT be exported:')
+      %ul
+        %li= _('Job traces and artifacts')
+        %li= _('Container registry images')
+        %li= _('CI variables')
+        %li= _('Webhooks')
+        %li= _('Any encrypted tokens')
+  %p= _('Once the exported file is ready, you will receive a notification email with a download link, or you can download it from this page.')
+  - if project.export_status == :finished
+    = link_to _('Download export'), download_export_project_path(project),
+            rel: 'nofollow', download: '', method: :get, class: "btn btn-default"
+    = link_to _('Generate new export'), generate_new_export_project_path(project),
+            method: :post, class: "btn btn-default"
+  - else
+    = link_to _('Export project'), export_project_path(project),
+            method: :post, class: "btn btn-default"

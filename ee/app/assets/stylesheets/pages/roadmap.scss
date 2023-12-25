@@ -1,0 +1,372 @@
+$header-item-height: 60px;
+$item-height: 50px;
+$details-cell-width: 320px;
+$timeline-cell-width: 180px;
+$border-style: 1px solid $border-gray-normal;
+$roadmap-gradient-dark-gray: rgba(0, 0, 0, 0.15);
+$roadmap-gradient-gray: rgba(255, 255, 255, 0.001);
+$scroll-top-gradient: linear-gradient(to bottom, $roadmap-gradient-dark-gray 0%, $roadmap-gradient-gray 100%);
+$scroll-bottom-gradient: linear-gradient(to bottom, $roadmap-gradient-gray 0%, $roadmap-gradient-dark-gray 100%);
+$column-right-gradient: linear-gradient(to right, $roadmap-gradient-dark-gray 0%, $roadmap-gradient-gray 100%);
+
+@keyframes colorTransitionDetailsCell {
+  from {
+    background-color: $blue-100;
+  }
+
+  to {
+    background-color: $white-light;
+  }
+}
+
+@keyframes fadeInDetails {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeinTimelineBar {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 0.75;
+  }
+}
+
+@mixin roadmap-scroll-mixin {
+  height: $grid-size;
+  width: $details-cell-width;
+  pointer-events: none;
+}
+
+.epics-details-filters {
+  .btn-group {
+    .dropdown-toggle {
+      border-top-right-radius: 0;
+      border-bottom-right-radius: 0;
+    }
+
+    .btn-sort-direction {
+      border-left: 0;
+
+      &:hover {
+        border-color: $gray-darkest;
+      }
+    }
+
+    @include media-breakpoint-down(xs) {
+      display: flex;
+
+      .dropdown-menu-sort {
+        // This is a hack to fix dropdown alignment in small screens
+        // where Bootstrap applies inline `transform: translate3d(...)`
+        // and since our dropdown button has sort direction button
+        // present, alignment needs to compensate for that space
+        // without which it appears shifted towards left.
+        //
+        // One more approach is to override `transform` using `!important`
+        // but that too involves using magic number
+        margin-left: 27px;
+      }
+    }
+  }
+}
+
+.epics-roadmap-filters {
+  .epics-details-filters {
+    .btn-roadmap-preset {
+      padding: 7px $gl-btn-padding;
+    }
+  }
+}
+
+.group-epics-roadmap-wrapper {
+  padding-bottom: 0;
+}
+
+.breadcrumbs.group-epics-roadmap {
+  border-bottom: $border-style;
+
+  .breadcrumbs-container {
+    border-bottom: 0;
+  }
+}
+
+.roadmap-container {
+  overflow: hidden;
+
+  &.overflow-reset {
+    overflow: initial;
+  }
+}
+
+.roadmap-shell {
+  position: relative;
+  overflow-x: auto;
+
+  .skeleton-loader {
+    position: absolute;
+    top: $header-item-height;
+    left: $timeline-cell-width / 2;
+    width: $details-cell-width;
+    height: 100%;
+    padding-top: $gl-padding-top;
+    padding-left: $gl-padding;
+    z-index: 4;
+
+    &::after {
+      height: 100%;
+    }
+  }
+
+  &.prevent-vertical-scroll {
+    overflow-y: hidden;
+  }
+}
+
+.roadmap-timeline-section .timeline-header-blank::after,
+.epics-list-section .epic-details-cell::after,
+.skeleton-loader::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: -$grid-size;
+  width: $grid-size;
+  pointer-events: none;
+  background: $column-right-gradient;
+}
+
+.roadmap-timeline-section {
+  position: sticky;
+  position: -webkit-sticky;
+  top: 0;
+  z-index: 3;
+
+  .timeline-header-blank,
+  .timeline-header-item {
+    box-sizing: border-box;
+    float: left;
+    height: $header-item-height;
+    border-bottom: $border-style;
+    background-color: $white-light;
+  }
+
+  .timeline-header-blank {
+    position: sticky;
+    position: -webkit-sticky;
+    top: 0;
+    left: 0;
+    width: $details-cell-width;
+    z-index: 2;
+
+    &::after {
+      height: $header-item-height;
+    }
+  }
+
+  .timeline-header-item {
+    &:last-of-type .item-label {
+      border-right: 0;
+    }
+
+    .item-label,
+    .item-sublabel .sublabel-value {
+      color: $gray-600;
+      font-weight: 400;
+
+      &.label-dark {
+        color: $gray-900;
+      }
+
+      &.label-bold {
+        font-weight: 600;
+      }
+    }
+
+    .item-label {
+      padding: $gl-padding-8 $gl-padding;
+      border-right: $border-style;
+      border-bottom: $border-style;
+    }
+
+    .item-sublabel {
+      position: relative;
+      display: flex;
+
+      .sublabel-value {
+        flex-grow: 1;
+        flex-basis: 0;
+        text-align: center;
+        font-size: $code-font-size;
+        line-height: 1.5;
+        padding: 2px 0;
+      }
+
+      .today-bar {
+        position: absolute;
+        top: 20px;
+        width: 2px;
+        background-color: $red-500;
+        pointer-events: none;
+      }
+
+      .today-bar::before {
+        content: '';
+        position: absolute;
+        top: -2px;
+        left: -3px;
+        height: $grid-size;
+        width: $grid-size;
+        background-color: inherit;
+        border-radius: 50%;
+      }
+    }
+  }
+
+  &.scroll-top-shadow .timeline-header-blank::before {
+    @include roadmap-scroll-mixin;
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: -$grid-size;
+    border-top: 1px solid $white-light;
+    background: $scroll-top-gradient;
+  }
+}
+
+.epics-list-section {
+  .epics-list-item {
+    &:hover {
+      .epic-details-cell,
+      .epic-timeline-cell {
+        background-color: $gray-100;
+      }
+    }
+
+    &.epics-list-item-empty {
+      &:hover {
+        .epic-details-cell,
+        .epic-timeline-cell {
+          background-color: $white-light;
+          border-bottom: 0;
+        }
+      }
+
+      .epic-details-cell,
+      .epic-details-cell::after,
+      .epic-timeline-cell {
+        height: 100%;
+      }
+    }
+
+    &.newly-added-epic {
+      .epic-details-cell {
+        animation: colorTransitionDetailsCell 3s;
+      }
+    }
+
+    .epic-details-cell,
+    .epic-timeline-cell {
+      box-sizing: border-box;
+      float: left;
+      height: $item-height;
+      border-bottom: $border-style;
+    }
+
+    .epic-details-cell {
+      position: sticky;
+      position: -webkit-sticky;
+      left: 0;
+      width: $details-cell-width;
+      padding: $gl-padding-8 $gl-padding;
+      font-size: $code-font-size;
+      background-color: $white-light;
+      z-index: 2;
+
+      &::after {
+        height: $item-height;
+      }
+
+      .epic-title,
+      .epic-group-timeframe {
+        animation: fadeInDetails 1s;
+      }
+
+      .epic-title {
+        display: table;
+        table-layout: fixed;
+        width: 100%;
+
+        .epic-url {
+          display: table-cell;
+          color: $gray-900;
+          font-weight: 600;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
+      }
+
+      .epic-group-timeframe {
+        color: $gray-700;
+        width: 100%;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      .epic-group:hover {
+        cursor: pointer;
+      }
+    }
+
+    .epic-timeline-cell {
+      background-color: transparent;
+      border-right: $border-style;
+
+      .timeline-bar-wrapper {
+        position: relative;
+      }
+
+      .timeline-bar {
+        position: absolute;
+        top: 12px;
+        height: 24px;
+        background-color: $blue-500;
+        border-radius: $border-radius-default;
+        opacity: 0.75;
+        animation: fadeinTimelineBar 1s;
+
+        &:hover {
+          opacity: 1;
+        }
+
+        &.start-date-undefined {
+          background: linear-gradient(to right, $roadmap-gradient-gray 0%, $blue-200 50%, $blue-500 100%);
+        }
+
+        &.end-date-undefined {
+          background: linear-gradient(to right, $blue-500 0%, $blue-200 50%, $roadmap-gradient-gray 100%);
+        }
+      }
+
+      &:last-child {
+        border-right: 0;
+      }
+    }
+  }
+
+  .scroll-bottom-shadow {
+    @include roadmap-scroll-mixin;
+    position: fixed;
+    bottom: 0;
+    background: $scroll-bottom-gradient;
+    z-index: 2;
+  }
+}

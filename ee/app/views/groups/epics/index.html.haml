@@ -1,0 +1,14 @@
+- page_title "Epics"
+
+.top-area
+  = render 'shared/issuable/epic_nav', type: :epics
+  .nav-controls
+    - if can?(current_user, :create_epic, @group)
+      #epic-create-root{ data: { endpoint: request.url, 'align-right' => true } }
+
+= render 'shared/epic/search_bar', type: :epics
+
+- if @epics.to_a.any?
+  = render 'shared/epics'
+- else
+  = render 'shared/empty_states/epics'

@@ -1,0 +1,76 @@
+$token-spacing-bottom: 0.5em;
+
+.related-issues-block {
+  margin-top: 3 * $gl-vert-padding;
+
+  .card-slim {
+    overflow: auto;
+  }
+}
+
+.related-issues-header-help-icon {
+  margin-left: 0.25em;
+  color: $gl-text-color-secondary;
+}
+
+.related-issues-header-issue-count {
+  margin-left: 0.5em;
+}
+
+.related-issues-add-related-issues-form-with-break {
+  border-bottom: 1px solid $border-color;
+}
+
+.related-issues-token-body {
+  padding: 0;
+  transition-property: max-height, padding, opacity;
+  transition-duration: $general-hover-transition-duration;
+  transition-timing-function: $general-hover-transition-curve;
+
+  &.collapsed {
+    overflow: hidden;
+    max-height: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    opacity: 0;
+  }
+
+  li .issuable-info-container {
+    padding-left: $gl-padding;
+
+    @include media-breakpoint-down(md) {
+      padding-left: $gl-padding-8;
+    }
+  }
+
+  a.issuable-main-info:hover {
+    text-decoration: none;
+
+    .issue-token-title-text {
+      text-decoration: underline;
+    }
+  }
+}
+
+.related-issues-loading-icon {
+  margin-bottom: $token-spacing-bottom;
+  line-height: 1.75;
+}
+
+.related-issues-token-list {
+  display: flex;
+  flex-wrap: wrap;
+  margin-bottom: 0;
+  padding-left: 0;
+  list-style: none;
+}
+
+.related-issues-token-list-item {
+  max-width: 100%;
+  margin-bottom: $token-spacing-bottom;
+  margin-right: 5px;
+}
+
+.issue-token-end {
+  order: 1;
+}

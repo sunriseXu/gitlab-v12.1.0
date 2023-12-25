@@ -1,0 +1,10 @@
+- @no_container = true
+- page_title _('CI / CD Charts')
+
+%div{ class: container_class }
+
+  #charts.ci-charts
+    = render 'projects/pipelines/charts/overall'
+
+    %hr
+    = render 'projects/pipelines/charts/pipelines'
